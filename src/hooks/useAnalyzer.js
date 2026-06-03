@@ -129,8 +129,10 @@ const extrairPDF = async(arrayBuffer) => {
   const analyzeRoutine = async () => {
     if (!routineCode.trim()) {
       alert('Por favor, insira o código ou nome da rotina');
-      return;
+      return
     }
+
+    
 
     setIsAnalyzing(true);
     
@@ -142,10 +144,7 @@ const extrairPDF = async(arrayBuffer) => {
         attachmentContext = `\nANEXOS ANALISADOS: ${uploadedFiles.length} arquivo(s) processado(s) - Tipos: ${uniqueTypes.join(', ')}`;
         attachmentContext += '\n\nCONTEUDO DOS ANEXOS PARA ANÁLISE:';
 
-        const imagens = uploadedFiles.filter(file => file.isImage)
-
-        const imagensFormatadas = imagens.map(file => ({type: "image_url", image_url: { url: file.url }}))
-
+       
         uploadedFiles.forEach(file => {
           const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
           const sizeLabel = file.size > 1024 * 1024 ? `${fileSizeMB} MB` : `${(file.size / 1024).toFixed(1)} KB`;
@@ -166,6 +165,9 @@ const extrairPDF = async(arrayBuffer) => {
         attachmentContext += `\n\nINSTRUÇÃO IMPORTANTE: Use todas as informações dos anexos acima para enriquecer a análise da rotina.`;
       }
       
+
+
+
       let changesContext = systemChanges.trim() ? `\nMUDANCAS NO SISTEMA: ${systemChanges.trim()}` : '';
       let environmentContext = datasulVersion.trim() ? `\nAMBIENTE: Versao Datasul: ${datasulVersion}` : '';
       let questionContext = specificQuestion.trim() ? `\nPERGUNTA ESPECIFICA DO USUARIO: "${specificQuestion.trim()}"\nIMPORTANTE: Alem da analise geral da rotina, de atencao especial para responder esta pergunta especifica do usuario.` : '';
@@ -188,6 +190,12 @@ const extrairPDF = async(arrayBuffer) => {
   "pontos_verificar": "pontos a verificar",
   "limitacoes_analise": "limitacoes"
 }`;
+
+ const imagens = uploadedFiles.filter(file => file.isImage)
+
+ const imagensFormatadas = imagens.map(file => ({type: "image_url", image_url: { url: file.url }}))
+
+
 
       const response = await fetch('/api/analyze', {
         method: 'POST',
