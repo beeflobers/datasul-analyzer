@@ -4,7 +4,7 @@ import { getFileTypeLabel } from '../utils/datasulHelpers';
 import * as pdfjsLib from 'pdfjs-dist'
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`
 import mammoth from 'mammoth'
-import * as XLSX from "xlsx"
+import * as XLSX from 'xlsx'
 
 export const useAnalyzer = () => {
   const [routineCode, setRoutineCode] = useState('');
