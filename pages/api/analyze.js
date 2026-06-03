@@ -1,6 +1,5 @@
 // pages/api/analyze.js
 import OpenAI from "openai";
-import { content } from "../../tailwind.config";
 
 const client = new OpenAI({
   baseURL: "https://api.x.ai/v1",
@@ -13,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt } = req.body;
+    const { prompt, content } = req.body;
 
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
