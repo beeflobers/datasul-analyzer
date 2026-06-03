@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   try {
     const { prompt, content } = req.body;
 
-    if (!prompt) {
+    if (!prompt && !content) {
       return res.status(400).json({ error: 'Prompt is required' });
     }
 
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       messages: [
         {
           role: "user",
-          content: prompt || content
+          content: content || prompt
         }
       ],
       temperature: 0.7,
