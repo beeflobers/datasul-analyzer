@@ -1,5 +1,6 @@
 // pages/api/analyze.js
 import OpenAI from "openai";
+import { content } from "../../tailwind.config";
 
 const client = new OpenAI({
   baseURL: "https://api.x.ai/v1",
@@ -23,7 +24,7 @@ export default async function handler(req, res) {
       messages: [
         {
           role: "user",
-          content: prompt
+          content: prompt || content
         }
       ],
       temperature: 0.7,
