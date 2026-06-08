@@ -50,15 +50,15 @@ const extrairPDF = async(arrayBuffer) => {
         const conteudoDeTodasAsabas = workbook.SheetNames.map(aba => {
         const planilha = workbook.Sheets[aba]
         const csvCompleto = XLSX.utils.sheet_to_csv(planilha)
-        console.log(csv)
+        console.log(csvCompleto)
         const linhas = csvCompleto.split('\n')
         const limiteDelinhas = 100
         const csvLimitado = linhas.slice(0, limiteDelinhas).join('\n')
         const avisoCorte = linhas.length > limiteDelinhas
-        ? `\n\n⚠️ NOTA: Planilha muito longa. Exibindo apenas as primeiras ${limiteLinhas} de ${linhas.length} linhas para preservar o limite de tokens.`
+        ? `\n\n⚠️ NOTA: Planilha muito longa. Exibindo apenas as primeiras ${limiteDelinhas} de ${linhas.length} linhas para preservar o limite de tokens.`
     : '';
          return ` --- ABA:${aba} --- \n${csvLimitado}${avisoCorte}`}).join('\n\n')
-         
+
         return `[PLANILHA EXCEL: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]\n\nCONTÉUDO DA PLANILHA:\N${conteudoDeTodasAsabas}SOLUÇÃO MANUAL: Identifique dados relevantes e descreva no contexto.`;
         }
     } catch (error) {
