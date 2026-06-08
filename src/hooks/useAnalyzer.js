@@ -46,16 +46,21 @@ const extrairPDF = async(arrayBuffer) => {
         return `[DOCUMENTO WORD: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]\n${resultado.value}💡 SOLUÇÃO MANUAL: Abra o documento e cole o conteúdo no contexto.`;
       } else if (['xls', 'xlsx'].includes(extension)) {
         const workbook = XLSX.read(arrayBuffer, {type: 'array'})
-        const primeiraABA = workbook.SheetNames[0]
-        const csv = XLSX.utils.sheet_to_csv(workbook.Sheets[primeiraABA])
-        const linhas = csv.split('\n')
+
+        const conteudoDeTodasAsabas = workbook.SheetNames.map(aba => {
+        const planilha = workbook.Sheets[aba]
+        const csvCompleto = XLSX.utils.sheet_to_csv(planilha)
+        console.log(csv)
+        const linhas = csvCompleto.split('\n')
         const limiteDelinhas = 100
         const csvLimitado = linhas.slice(0, limiteDelinhas).join('\n')
         const avisoCorte = linhas.length > limiteDelinhas
         ? `\n\n⚠️ NOTA: Planilha muito longa. Exibindo apenas as primeiras ${limiteLinhas} de ${linhas.length} linhas para preservar o limite de tokens.`
     : '';
-        return `[PLANILHA EXCEL: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]\n\nCONTÉUDO DA PLANILHA:\N${csvLimitado} ${avisoCorte} SOLUÇÃO MANUAL: Identifique dados relevantes e descreva no contexto.`;
-      }
+         return ` --- ABA:${aba} --- \n${csvLimitado}${avisoCorte}`}).join('\n\n')
+         
+        return `[PLANILHA EXCEL: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]\n\nCONTÉUDO DA PLANILHA:\N${conteudoDeTodasAsabas}SOLUÇÃO MANUAL: Identifique dados relevantes e descreva no contexto.`;
+        }
     } catch (error) {
       console.error('Erro no processamento:', error);
       return `[ARQUIVO: ${file.name}]\nErro geral no processamento: ${error.message}`;
