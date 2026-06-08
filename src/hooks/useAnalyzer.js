@@ -48,7 +48,13 @@ const extrairPDF = async(arrayBuffer) => {
         const workbook = XLSX.read(arrayBuffer, {type: 'array'})
         const primeiraABA = workbook.SheetNames[0]
         const csv = XLSX.utils.sheet_to_csv(workbook.Sheets[primeiraABA])
-        return `[PLANILHA EXCEL: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]\n💡 SOLUÇÃO MANUAL: Identifique dados relevantes e descreva no contexto.`;
+        const linhas = csv.split('\n')
+        const limiteDelinhas = 100
+        const csvLimitado = linhas.slice(0, limiteDelinhas).join('\n')
+        const avisoCorte = linhas.length > limiteDelinhas
+        ? `\n\n⚠️ NOTA: Planilha muito longa. Exibindo apenas as primeiras ${limiteLinhas} de ${linhas.length} linhas para preservar o limite de tokens.`
+    : '';
+        return `[PLANILHA EXCEL: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]\n\nCONTÉUDO DA PLANILHA:\N${csvLimitado} ${avisoCorte} SOLUÇÃO MANUAL: Identifique dados relevantes e descreva no contexto.`;
       }
     } catch (error) {
       console.error('Erro no processamento:', error);
