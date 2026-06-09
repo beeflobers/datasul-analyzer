@@ -1,11 +1,4 @@
 // pages/api/analyze.js
-import OpenAI from "openai";
-import { Input } from "postcss";
-
-const client = new OpenAI({
-  baseURL: "https://api.x.ai/v1/responses",
-  apiKey: process.env.key,
-});
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
