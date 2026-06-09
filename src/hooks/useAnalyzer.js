@@ -40,7 +40,7 @@ const extrairPDF = async(arrayBuffer) => {
     try {
       if (extension === 'pdf') {
         const texto = await extrairPDF(arrayBuffer)
-        return `[ARQUIVO PDF: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]\nIMPORTANTE: Este é um arquivo PDF que contém informações relevantes para a análise da rotina.\N${texto}O usuário anexou este documento para fornecer contexto adicional.`;
+        return `[ARQUIVO PDF: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]\nIMPORTANTE: Este é um arquivo PDF que contém informações relevantes para a análise da rotina.\N${texto.value}O usuário anexou este documento para fornecer contexto adicional.`;
       } else if (extension === 'docx') {
         const resultado = await mammoth.convertToHtml({arrayBuffer: arrayBuffer})
         return `[DOCUMENTO WORD: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]\n${resultado.value}💡 SOLUÇÃO MANUAL: Abra o documento e cole o conteúdo no contexto.`;
