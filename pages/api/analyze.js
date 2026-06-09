@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       },
 
       body: JSON.stringify({
-      model: "grok-4-0709",
+      model: "grok-4.3",
       input: [
         {
           role: "user",
@@ -33,12 +33,11 @@ export default async function handler(req, res) {
         }
       ],
       temperature: 0.4,
-      max_completion_tokens: 4000
+      max_tokens: 4000
     })
     });
 
     const data = await response.json()
-    console.log('Resposta xAI:', JSON.stringify(data, null, 2))
 
     if (!response.ok) {
       
