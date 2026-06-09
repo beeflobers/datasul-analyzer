@@ -183,7 +183,7 @@ const extrairPDF = async(arrayBuffer) => {
       let environmentContext = datasulVersion.trim() ? `\nAMBIENTE: Versao Datasul: ${datasulVersion}` : '';
       let questionContext = specificQuestion.trim() ? `\nPERGUNTA ESPECIFICA DO USUARIO: "${specificQuestion.trim()}"\nIMPORTANTE: Alem da analise geral da rotina, de atencao especial para responder esta pergunta especifica do usuario.` : '';
       
-      const prompt = `Analise a rotina Datasul: ${routineCode}\n\nCONTEXTO: ${context || 'Nenhum'}${attachmentContext}${changesContext}${environmentContext}${questionContext}\n\nResponda apenas com JSON (sem backticks):
+      const prompt = `Você tem acesso a busca na web. Use-a para pesquisar informações atualizadas sobre rotinas e versões do Datasul quando necessário.  Analise a rotina Datasul: ${routineCode}\n\nCONTEXTO: ${context || 'Nenhum'}${attachmentContext}${changesContext}${environmentContext}${questionContext}\n\nResponda apenas com JSON (sem backticks):
 {
   "codigo_rotina": "codigo da rotina",
   "nome_completo": "nome completo",
