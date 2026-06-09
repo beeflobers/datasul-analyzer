@@ -3,7 +3,7 @@ import OpenAI from "openai";
 import { Input } from "postcss";
 
 const client = new OpenAI({
-  baseURL: "https://api.x.ai/v1",
+  baseURL: "https://api.x.ai/v1/responses",
   apiKey: process.env.key,
 });
 
