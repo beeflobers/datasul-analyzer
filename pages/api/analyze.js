@@ -38,8 +38,10 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json()
+    console.log('Resposta xAI:', JSON.stringify(data, null, 2))
 
     if (!response.ok) {
+      
   throw new Error(data.error?.message || 'Erro na API do Grok');
 }
 

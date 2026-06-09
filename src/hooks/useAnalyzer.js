@@ -224,6 +224,14 @@ const extrairPDF = async(arrayBuffer) => {
         throw new Error(errorData.error || 'Falha na requisição da API');
       }
 
+      
+
+
+
+
+
+
+
       const data = await response.json();
       let cleanResponse = data.response.trim();
       if (cleanResponse.startsWith('```json')) cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');
