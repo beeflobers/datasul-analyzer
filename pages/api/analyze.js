@@ -12,6 +12,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Prompt is required' });
     }
 
+
+    console.log("API KEY existe?", !!process.env.key);
+
     const response = await fetch("https://api.x.ai/v1/responses", {
       method:"POST",
       headers: {
@@ -39,14 +42,9 @@ export default async function handler(req, res) {
 
     const data = await response.json()
 
-    console.log("Status:", response.status)
-    console.log("Resposta", text)
-
-
-
     if (!response.ok) {
       
-  throw new Error(data.error?.message || 'Erro na API do Grok: ${response.status} - ${text}`');
+  throw new Error(data.error?.message || 'Erro na API do Grok');
 }
 
 
