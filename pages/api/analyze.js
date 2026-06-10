@@ -24,12 +24,7 @@ export default async function handler(req, res) {
 
       body: JSON.stringify({
       model: "grok-4.3",
-      input: [
-        {
-          role: "user",
-          content: content || prompt
-        }
-      ], 
+      input: content || prompt,
       tools: [
         {
           type:"web_search"
