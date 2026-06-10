@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     }
 
 
-    console.log("API KEY existe?", !!process.env.key);
+  
 
     const response = await fetch("https://api.x.ai/v1/responses", {
       method:"POST",
@@ -42,9 +42,16 @@ export default async function handler(req, res) {
 
     const data = await response.json()
 
+
+console.log("xAI status:", response.status);
+console.log("xAI response:", JSON.stringify(data, null, 2));
+
+
+
+
     if (!response.ok) {
       
-  throw new Error(data.error?.message || 'Erro na API do Grok');
+  throw new Error(JSON.stringify(data))
 }
 
 
