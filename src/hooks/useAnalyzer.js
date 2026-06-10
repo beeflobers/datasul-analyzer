@@ -207,16 +207,22 @@ const extrairPDF = async(arrayBuffer) => {
  const imagensFormatadas = imagens.map(file => ({type: "image_url", image_url: { url: file.url }}))
 
 
+let payloadContent;
+
+if (imagensFormatadas.length > 0 ) {
+  payloadContent = [
+  {type: "text", text: prompt},
+  ...imagensFormatadas
+  ]
+} else {
+  payloadContent = [{type: "text", text: prompt}]
+}
 
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          content: [
-            ...imagensFormatadas.length > 0 
-           ? [ {...imagensFormatadas, type: "text", text: prompt}]
-           : prompt
-          ]
+          content: payloadContent 
          })
       });
 
@@ -225,14 +231,7 @@ const extrairPDF = async(arrayBuffer) => {
         throw new Error(errorData.error || 'Falha na requisição da API');
       }
 
-      
-
-
-
-
-
-
-
+    
       const data = await response.json();
       let cleanResponse = data.response.trim();
       if (cleanResponse.startsWith('```json')) cleanResponse = cleanResponse.replace(/^```json\s*/, '').replace(/\s*```$/, '');

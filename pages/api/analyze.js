@@ -24,7 +24,13 @@ export default async function handler(req, res) {
 
       body: JSON.stringify({
       model: "grok-4.3",
-      input: content || prompt,
+      input: [
+        {
+          type: "message",
+          role: "user",
+          content: content
+        }
+      ],
       tools: [
         {
           type:"web_search"
@@ -37,14 +43,11 @@ export default async function handler(req, res) {
 
     const data = await response.json()
 
-
 console.log("xAI status:", response.status);
 console.log("xAI response:", JSON.stringify(data, null, 2));
 
     if (!response.ok) {
-      
-  throw new Error(JSON.stringify(data)|| 'Erro na API do Grok')
-}
+      throw new Error(JSON.stringify(data)|| 'Erro na API do Grok')}
 
 
 
@@ -54,6 +57,8 @@ console.log("xAI response:", JSON.stringify(data, null, 2));
     .filter(c => c.type === 'output_text')
     .map(c => c.text)
     .join('')
+
+    
     res.status(200).json({ response: grokResponse });
 
   } catch (error) {
