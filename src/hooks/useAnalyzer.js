@@ -213,8 +213,9 @@ const extrairPDF = async(arrayBuffer) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           content: [
-            ...imagensFormatadas,
-            {type: "text", text: prompt}
+            ...imagensFormatadas.length > 0 
+           ? [ {...imagensFormatadas, type: "text", text: prompt}]
+           : prompt
           ]
          })
       });
