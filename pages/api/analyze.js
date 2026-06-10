@@ -39,9 +39,14 @@ export default async function handler(req, res) {
 
     const data = await response.json()
 
+    console.log("Status:", response.status)
+    console.log("Resposta", text)
+
+
+
     if (!response.ok) {
       
-  throw new Error(data.error?.message || 'Erro na API do Grok');
+  throw new Error(data.error?.message || 'Erro na API do Grok: ${response.status} - ${text}`');
 }
 
 
