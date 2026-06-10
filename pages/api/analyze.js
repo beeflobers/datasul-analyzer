@@ -41,12 +41,9 @@ export default async function handler(req, res) {
 console.log("xAI status:", response.status);
 console.log("xAI response:", JSON.stringify(data, null, 2));
 
-
-
-
     if (!response.ok) {
       
-  throw new Error(JSON.stringify(data))
+  throw new Error(JSON.stringify(data)|| 'Erro na API do Grok')
 }
 
 
