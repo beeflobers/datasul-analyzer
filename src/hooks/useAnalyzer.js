@@ -219,9 +219,8 @@ const extrairPDF = async(arrayBuffer) => {
          })
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const errorData = await response.json();
         throw new Error(errorData.error || 'Falha na requisição da API');
       }
 
