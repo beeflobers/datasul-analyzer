@@ -13,6 +13,22 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Content is required' });
     }
 
+    let finalInput = []
+
+    if (Array.isArray(content)) {
+      finalInput = content.map(item => {
+        if (item.type === "text") {
+          return { role: "user", content: item.text }
+        } else if (item.type === "image_url") {
+          return { role: "user", content: `[Imagem Anexada: ${item.image_url.url.substring(0, 100)}...]` }
+        }
+        return { role: "user", content: String(item) }
+      })
+    } else {
+      finalInput = [{ role: "user", content: String(content) }]
+    }
+
+
 
     const response = await fetch("https://api.x.ai/v1/responses", {
       method:"POST",
@@ -23,12 +39,7 @@ export default async function handler(req, res) {
 
       body: JSON.stringify({
       model: "grok-4.3",
-      input: [
-        {
-          role: "user",
-          content: content
-        }
-      ],
+      input: finalInput,
       tools: [
         {
           type:"web_search"
