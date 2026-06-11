@@ -18,14 +18,15 @@ export default async function handler(req, res) {
     if (Array.isArray(content)) {
       finalInput = content.map(item => {
         if (item.type === "text") {
-          return { role: "user", content: item.text }
+          return { role: "user", content: item.text };
         } else if (item.type === "image_url") {
-          return { role: "user", content: `[Imagem Anexada: ${item.image_url.url.substring(0, 100)}...]` }
+          return { role: "user", content: [{ type: "image_url", image_url: { url: item.image_url } }] };
         }
-        return { role: "user", content: String(item) }
-      })
+
+        return { role: "user", content: String(item) };
+      });
     } else {
-      finalInput = [{ role: "user", content: String(content) }]
+      finalInput = [{ role: "user", content: String(content) }];
     }
 
 
