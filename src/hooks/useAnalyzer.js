@@ -225,7 +225,7 @@ if (imagensFormatadas.length > 0 ) {
           input: [
             {
               role: "user",
-            content: payloadContent
+            content: "payloadContent"
             }
           ],
           tools: [
