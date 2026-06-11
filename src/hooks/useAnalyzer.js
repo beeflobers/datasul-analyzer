@@ -220,23 +220,18 @@ if (imagensFormatadas.length > 0 ) {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          model:"grok-4.3",
+        body: JSON.stringify({
+          model: "grok-4",
           input: [
             {
               role: "user",
-            content: payloadContent
+              content: payloadContent
             }
           ],
-          tools: [
-        {
-          type:"web_search"
-        }
-      ],
-      temperature: 0.4,
-      max_output_tokens: 4000
-    })
-    });
+          temperature: 0.4,
+          max_output_tokens: 4000
+        })
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
