@@ -47,14 +47,16 @@ console.log("xAI response:", JSON.stringify(data, null, 2));
     if (!response.ok) {
       throw new Error(JSON.stringify(data)|| 'Erro na API do Grok')}
 
+const messageBlock = data.output?.find(block => block.type === 'message')
 
+    const grokResponse = messageBlock?.content
+    ? messageBlock.content.map(c => c.text).join('')
+    :'';
 
-    const grokResponse = data.output
-    .filter(block => block.type === 'message')
-    .flatMap(block => block.content)
-    .filter(c => c.type === 'output_text')
-    .map(c => c.text)
-    .join('')
+    if(!grokResponse) {
+      throw new Error(' A API retornou um resposta vazia')
+    }
+
 
     
     res.status(200).json({ response: grokResponse });
