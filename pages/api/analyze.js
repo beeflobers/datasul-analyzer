@@ -1,5 +1,7 @@
 // pages/api/analyze.js
 
+import { Store } from "lucide-react";
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -13,7 +15,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Content is required' });
     }
 
-    let finalInput = []
+    let formattedContent = []
 
     if (Array.isArray(rawContent)) {
       formattedContent = rawContent.map(item => {
@@ -26,7 +28,7 @@ export default async function handler(req, res) {
       })
 
     } else {
-      formattedContent = [{ type: "text", content: String(rawContent) }];
+      formattedContent = [{ type: "text", text: String(rawContent) }];
     }
 
 
@@ -51,7 +53,8 @@ export default async function handler(req, res) {
         }
       ],
       temperature: 0.4,
-      max_output_tokens: 4000
+      max_output_tokens: 4000,
+      Store: false
     })
     });
 
