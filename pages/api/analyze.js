@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { content } = req.body;
+    const { input } = req.body;
 
      if (!content || (Array.isArray(content) && content.length === 0)) {
       return res.status(400).json({ error: 'Content is required' });
