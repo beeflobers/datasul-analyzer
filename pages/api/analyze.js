@@ -32,6 +32,30 @@ export default async function handler(req, res) {
     }
 
 
+const payload = {
+  model: "grok-4",
+  input: [
+    {
+      role: "user",
+      content: formattedContent
+    }
+  ],
+  tools: [
+    {
+      type: "web_search"
+    }
+  ],
+  temperature: 0.4,
+  max_output_tokens: 4000,
+  store: false
+};
+
+console.log(JSON.stringify(payload, null, 2));
+
+
+
+
+
     const response = await fetch("https://api.x.ai/v1/responses", {
       method:"POST",
       headers: {
@@ -40,7 +64,7 @@ export default async function handler(req, res) {
       },
 
       body: JSON.stringify({
-      model: "grok-4.3",
+      model: "grok-4",
       input: [
         {
           role: "user",
