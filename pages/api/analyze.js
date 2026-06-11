@@ -49,16 +49,11 @@ export default async function handler(req, res) {
         "Authorization": `Bearer ${process.env.key}`
       },
       body: JSON.stringify({
-        model: "grok-4", 
+        model: "grok-4",
         messages: [
           {
             role: "user",
-            content: messagesContent 
-          }
-        ],
-        tools: [
-          {
-            type: "web_search" 
+            content: messagesContent
           }
         ],
         temperature: 0.4,
