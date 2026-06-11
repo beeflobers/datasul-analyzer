@@ -13,22 +13,21 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Content is required' });
     }
 
-    let formattedContent = []
+    let finalInput = []
 
     if (Array.isArray(rawContent)) {
       formattedContent = rawContent.map(item => {
         if (item.type === "text") {
-          return { role: "user", content: item.text };
+          return { type: "input_text", text: item.text};
         } else if (item.type === "image_url") {
-          return { type: "image_url", image_url: { url: item.image_url }};
+          return { type: "input_image", image_url: item.image_url };
         }
-        return {type: "text", text: String(item) };
+        return [{type: "input_text", text: String(item) }];
       })
 
     } else {
       formattedContent = [{ type: "text", content: String(rawContent) }];
     }
-
 
 
     const response = await fetch("https://api.x.ai/v1/responses", {
