@@ -7,9 +7,9 @@ export default async function handler(req, res) {
 
   try {
     const { input } = req.body;
-    const content = input?.[0]?.content
+    const rawContent = input?.[0]?.content
 
-     if (!content || (Array.isArray(content) && content.length === 0)) {
+     if (!rawContent || (Array.isArray(rawContent) && rawContent.length === 0)) {
       return res.status(400).json({ error: 'Content is required' });
     }
 
