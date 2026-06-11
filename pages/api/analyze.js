@@ -24,11 +24,11 @@ export default async function handler(req, res) {
         } else if (item.type === "image_url") {
           return { type: "input_image", image_url: item.image_url };
         }
-        return [{type: "input_text", text: String(item) }];
+        return {type: "input_text", text: String(item) };
       })
 
     } else {
-      formattedContent = [{ type: "text", text: String(rawContent) }];
+      formattedContent = [{ type: "input_text", text: String(rawContent) }];
     }
 
 
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
       ],
       temperature: 0.4,
       max_output_tokens: 4000,
-      Store: false
+      store: false
     })
     });
 
