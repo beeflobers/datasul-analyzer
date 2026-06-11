@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
 let attachmentsList = [];
     imageObjs.forEach(img => {
-      const base64Url = img.image_url?.url;
+      let base64Url = img.image_url?.url;
       if (base64Url) {
         if(base64Url.includes(',')) {
            base64Url = base64Url.split(',') [1]
@@ -45,7 +45,7 @@ let attachmentsList = [];
     ];
 
     imageObjs.forEach(img => {
-      const base64Url = img.image_url?.url;
+      let base64Url = img.image_url?.url;
       if (base64Url) {
         finalInput.push({
           role: "user",
