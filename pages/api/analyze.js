@@ -1,5 +1,6 @@
 // pages/api/analyze.js
 
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -13,61 +14,48 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Content array is required' });
     }
 
-    
+   
     const textObj = rawContent.find(item => item.type === "input_text" || item.type === "text");
     const textPrompt = textObj ? (textObj.text || textObj.content) : "";
 
-   
     const imageObjs = rawContent.filter(item => item.type === "input_image" || item.type === "image_url");
 
-let attachmentsList = [];
+    
+    let messagesContent = [];
+
+   
+    if (textPrompt) {
+      messagesContent.push({ type: "text", text: textPrompt });
+    }
+
+    
     imageObjs.forEach(img => {
-      let base64Url = img.image_url?.url;
+      const base64Url = img.image_url?.url;
       if (base64Url) {
-        attachmentsList.push({
-          type: "image",
+        messagesContent.push({
+          type: "image_url",
           image_url: {
             url: base64Url 
           }
         });
       }
     });
-   
-    let finalInput = [
-      {
-        role: "user",
-        content: textPrompt, 
-        ...(attachmentsList.length > 0 && { attachments: attachmentsList }) 
-      }
-    ];
 
-    imageObjs.forEach(img => {
-      let base64Url = img.image_url?.url;
-      if (base64Url) {
-        finalInput.push({
-          role: "user",
-          content: "", 
-          attachments: [
-            {
-              type: "image",
-              image_url: {
-                url: base64Url 
-              }
-            }
-          ]
-        });
-      }
-    });
-
-    const response = await fetch("https://api.x.ai/v1/responses", {
+    
+    const response = await fetch("https://api.x.ai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.key}`
       },
       body: JSON.stringify({
-        model: "grok-4",
-        input: finalInput, 
+        model: "grok-4", 
+        messages: [
+          {
+            role: "user",
+            content: messagesContent 
+          }
+        ],
         tools: [
           {
             type: "web_search" 
@@ -83,22 +71,18 @@ let attachmentsList = [];
     console.log("xAI status:", response.status);
 
     if (!response.ok) {
-      const apiErrorMessage = data.error?.message || data.error || JSON.stringify(data);
-      console.error("Erro retornado da xAI:", apiErrorMessage);
-      throw new Error(apiErrorMessage);
+      console.error("Erro detalhado da API xAI:", JSON.stringify(data, null, 2));
+      throw new Error(data.error?.message || JSON.stringify(data));
     }
 
-   
-    const messageBlock = data.output?.find(block => block.type === 'message');
-    const grokResponse = messageBlock?.content
-      ? messageBlock.content.map(c => c.text).join('')
-      : '';
+    
+    const grokResponse = data.choices?.[0]?.message?.content || '';
 
     if (!grokResponse) {
-      throw new Error('Não foi possível extrair o texto de resposta da API.');
+      throw new Error('A API retornou uma resposta vazia.');
     }
 
-   
+    
     res.status(200).json({ response: grokResponse });
 
   } catch (error) {
