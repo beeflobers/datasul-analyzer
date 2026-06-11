@@ -217,14 +217,26 @@ if (imagensFormatadas.length > 0 ) {
 } else {
   payloadContent = [{type: "text", text: prompt}]
 }
-
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          content: payloadContent 
-         })
-      });
+          model:"grok-4.3",
+          input: [
+            {
+              role: "user",
+            content: payloadContent
+            }
+          ],
+          tools: [
+        {
+          type:"web_search"
+        }
+      ],
+      temperature: 0.4,
+      max_output_tokens: 4000
+    })
+    });
 
       if (!response.ok) {
         const errorData = await response.json();

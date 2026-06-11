@@ -6,14 +6,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt, content } = req.body;
+    const { content } = req.body;
 
-    if (!prompt && !content) {
-      return res.status(400).json({ error: 'Prompt is required' });
+     if (!content || (Array.isArray(content) && content.length === 0)) {
+      return res.status(400).json({ error: 'Content is required' });
     }
 
-
-  
 
     const response = await fetch("https://api.x.ai/v1/responses", {
       method:"POST",
@@ -26,7 +24,6 @@ export default async function handler(req, res) {
       model: "grok-4.3",
       input: [
         {
-          type: "message",
           role: "user",
           content: content
         }
