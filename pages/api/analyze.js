@@ -24,9 +24,6 @@ let attachmentsList = [];
     imageObjs.forEach(img => {
       let base64Url = img.image_url?.url;
       if (base64Url) {
-        if(base64Url.includes(',')) {
-           base64Url = base64Url.split(',') [1]
-        }
         attachmentsList.push({
           type: "image",
           image_url: {
