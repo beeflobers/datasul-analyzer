@@ -24,6 +24,9 @@ let attachmentsList = [];
     imageObjs.forEach(img => {
       const base64Url = img.image_url?.url;
       if (base64Url) {
+        if(base64Url.includes(',')) {
+           base64Url = base64Url.split(',') [1]
+        }
         attachmentsList.push({
           type: "image",
           image_url: {
@@ -66,7 +69,7 @@ let attachmentsList = [];
         "Authorization": `Bearer ${process.env.key}`
       },
       body: JSON.stringify({
-        model: "grok-4.3",
+        model: "grok-4",
         input: finalInput, 
         tools: [
           {
@@ -83,8 +86,9 @@ let attachmentsList = [];
     console.log("xAI status:", response.status);
 
     if (!response.ok) {
-      console.error("Erro detalhado retornado da xAI:", JSON.stringify(data, null, 2));
-      throw new Error(data.error?.message || JSON.stringify(data));
+      const apiErrorMessage = data.error?.message || data.error || JSON.stringify(data);
+      console.error("Erro retornado da xAI:", apiErrorMessage);
+      throw new Error(apiErrorMessage);
     }
 
    
