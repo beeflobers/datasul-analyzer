@@ -13,20 +13,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Content is required' });
     }
 
-    let finalInput = []
+    let formattedContent = []
 
-    if (Array.isArray(content)) {
-      finalInput = content.map(item => {
+    if (Array.isArray(rawContent)) {
+      formattedContent = rawContent.map(item => {
         if (item.type === "text") {
           return { role: "user", content: item.text };
         } else if (item.type === "image_url") {
-          return { role: "user", content: [{ type: "image_url", image_url: { url: item.image_url } }] };
+          return { type: "image_url", image_url: { url: item.image_url }};
         }
+        return {type: "text", text: String(item) };
+      })
 
-        return { role: "user", content: String(item) };
-      });
     } else {
-      finalInput = [{ role: "user", content: String(content) }];
+      formattedContent = [{ type: "text", content: String(rawContent) }];
     }
 
 
@@ -40,7 +40,12 @@ export default async function handler(req, res) {
 
       body: JSON.stringify({
       model: "grok-4.3",
-      input: finalInput,
+      input: [
+        {
+          role: "user",
+         content:formattedContent
+        }
+      ],
       tools: [
         {
           type:"web_search"
@@ -53,22 +58,25 @@ export default async function handler(req, res) {
 
     const data = await response.json()
 
-console.log("xAI status:", response.status);
-console.log("xAI response:", JSON.stringify(data, null, 2));
-
-    if (!response.ok) {
-      throw new Error(JSON.stringify(data)|| 'Erro na API do Grok')}
-
 const messageBlock = data.output?.find(block => block.type === 'message')
 
     const grokResponse = messageBlock?.content
     ? messageBlock.content.map(c => c.text).join('')
     :'';
 
+
+
+console.log("xAI status:", response.status);
+console.log("xAI response:", JSON.stringify(data, null, 2));
+
+    if (!response.ok) {
+      throw new Error(JSON.stringify(data)|| 'Erro na API do Grok')}
+
+
+
     if(!grokResponse) {
       throw new Error(' A API retornou um resposta vazia')
     }
-
 
     
     res.status(200).json({ response: grokResponse });
